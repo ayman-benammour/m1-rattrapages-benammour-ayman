@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => TaskProvider(),
       child: MaterialApp(
-        title: 'Time Tracking App',
+        title: 'Tempo Tasks',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
