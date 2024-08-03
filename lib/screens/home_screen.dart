@@ -36,6 +36,12 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
+                  IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    taskProvider.removeTask(context, task);
+                  },
+                ),
               ],
             ),
           );

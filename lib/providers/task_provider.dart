@@ -31,6 +31,33 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Remove task
-  // a faire
+  // Delete task
+  void removeTask(BuildContext context, Task task) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('🗑️ Confirm deletion'),
+          content: const Text('Are you sure you want to delete this task?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                  _tasks.remove(task);
+                  notifyListeners();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
