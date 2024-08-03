@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
 import 'add_task_screen.dart';
+import 'edit_task_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +13,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('✅ Tempo Tasks'),
+        title: const Text('📌 Tempo Tasks'),
       ),
       body: ListView.builder(
         itemCount: taskProvider.tasks.length,
@@ -21,6 +22,22 @@ class HomeScreen extends StatelessWidget {
           return ListTile(
             title: Text(task.name),
             subtitle: Text(task.category),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditTaskScreen(task: task),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),

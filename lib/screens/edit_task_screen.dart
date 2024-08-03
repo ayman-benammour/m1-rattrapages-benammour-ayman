@@ -3,19 +3,24 @@ import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
 import '../models/task.dart';
 
-class AddTaskScreen extends StatelessWidget {
+class EditTaskScreen extends StatelessWidget {
+  final Task task;
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _categoryController = TextEditingController();
-  final _commentController = TextEditingController();
+  late final TextEditingController _nameController;
+  late final TextEditingController _categoryController;
+  late final TextEditingController _commentController;
 
-  AddTaskScreen({super.key});
+  EditTaskScreen({super.key, required this.task}) {
+    _nameController = TextEditingController(text: task.name);
+    _categoryController = TextEditingController(text: task.category);
+    _commentController = TextEditingController(text: task.comment);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('➕ Add a task'),
+        title: const Text('✏️ Edit the task'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -52,18 +57,16 @@ class AddTaskScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    final task = Task(
-                      name: _nameController.text,
-                      category: _categoryController.text,
-                      comment: _commentController.text,
-                      duration: Duration.zero,
-                      date: DateTime.now(),
+                    Provider.of<TaskProvider>(context, listen: false).updateTask(
+                      task,
+                      _nameController.text,
+                      _categoryController.text,
+                      _commentController.text,
                     );
-                    Provider.of<TaskProvider>(context, listen: false).addTask(task);
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Add task'),
+                child: const Text('Save'),
               ),
             ],
           ),

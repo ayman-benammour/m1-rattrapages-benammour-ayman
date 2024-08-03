@@ -23,6 +23,14 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Edit task
+  void updateTask(Task task, String name, String category, String comment) {
+    task.name = name;
+    task.category = category;
+    task.comment = comment;
+    notifyListeners();
+  }
+
   // Remove task
   // a faire
 }
