@@ -3,7 +3,24 @@ import '../models/task.dart';
 import 'dart:async';
 
 class TaskProvider with ChangeNotifier {
-  final List<Task> _tasks = [];
+  final List<Task> _tasks = [
+    Task(
+      name: "Tâche 1",
+      category: "Travail",
+      comment: "Terminer le rapport mensuel",
+      expectedDuration: const Duration(hours: 2),
+      duration: Duration.zero,
+      date: DateTime.now(),
+    ),
+    Task(
+      name: "Faire du sport",
+      category: "Sport",
+      comment: "A faire le matin",
+      expectedDuration: const Duration(hours: 1),
+      duration: Duration.zero,
+      date: DateTime.now(),
+    ),
+  ];
   Timer? _timer;
 
   List<Task> get tasks => _tasks;
