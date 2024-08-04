@@ -1,38 +1,26 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
+import 'dart:async';
 
 class TaskProvider with ChangeNotifier {
-
-  // List tasks
-  final List<Task> _tasks = [
-    // Test
-    Task(
-      name: 'Faire du sport',
-      category: 'Sport',
-      comment: 'A faire le matin',
-      duration: const Duration(hours: 1),
-      date: DateTime.now(),
-    ),
-  ];
+  final List<Task> _tasks = [];
+  Timer? _timer;
 
   List<Task> get tasks => _tasks;
 
-  // Add task
   void addTask(Task task) {
     _tasks.add(task);
     notifyListeners();
   }
 
-  // Edit task
-  void updateTask(Task task, String name, String category, String comment) {
+  void editTask(Task task, String name, String category, String comment) {
     task.name = name;
     task.category = category;
     task.comment = comment;
     notifyListeners();
   }
 
-  // Delete task
-  void removeTask(BuildContext context, Task task) {
+  void deleteTask(BuildContext context, Task task) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -48,8 +36,8 @@ class TaskProvider with ChangeNotifier {
             ),
             TextButton(
               onPressed: () {
-                  _tasks.remove(task);
-                  notifyListeners();
+                _tasks.remove(task);
+                notifyListeners();
                 Navigator.of(context).pop();
               },
               child: const Text('Delete'),
@@ -60,4 +48,51 @@ class TaskProvider with ChangeNotifier {
     );
   }
 
+  void startTimer(Task task) {
+    task.isRunning = true;
+    task.startTime = DateTime.now();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (task.isRunning) {
+        task.duration += const Duration(seconds: 1);
+        if (task.duration >= task.expectedDuration && !task.isCompleted) {
+          task.isCompleted = true;
+        }
+        notifyListeners();
+      }
+    });
+  }
+
+  void stopTimer(BuildContext context, Task task) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm stop'),
+          content: const Text('If you stop the timer, you won\'t be able to restart it. Are you sure?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                task.isRunning = false;
+                if (task.duration < task.expectedDuration) {
+                  task.isCompleted = true;
+                }
+                _timer?.cancel();
+                _timer = null;
+                notifyListeners();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Stop'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

@@ -23,7 +23,7 @@ class EditTaskScreen extends StatelessWidget {
         title: const Text('✏️ Edit the task'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
@@ -57,7 +57,7 @@ class EditTaskScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    Provider.of<TaskProvider>(context, listen: false).updateTask(
+                    Provider.of<TaskProvider>(context, listen: false).editTask(
                       task,
                       _nameController.text,
                       _categoryController.text,

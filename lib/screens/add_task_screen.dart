@@ -8,6 +8,7 @@ class AddTaskScreen extends StatelessWidget {
   final _nameController = TextEditingController();
   final _categoryController = TextEditingController();
   final _commentController = TextEditingController();
+  final _expectedDurationController = TextEditingController();
 
   AddTaskScreen({super.key});
 
@@ -18,7 +19,7 @@ class AddTaskScreen extends StatelessWidget {
         title: const Text('➕ Add a task'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
@@ -48,14 +49,30 @@ class AddTaskScreen extends StatelessWidget {
                 controller: _commentController,
                 decoration: const InputDecoration(labelText: 'Comment'),
               ),
+              TextFormField(
+                controller: _expectedDurationController,
+                decoration: const InputDecoration(labelText: 'Expected Duration (in minutes)'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the expected duration';
+                  }
+                  if (int.tryParse(value) == null || int.parse(value) <= 0) {
+                    return 'Please enter a valid duration';
+                  }
+                  return null;
+                },
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    final expectedDuration = Duration(minutes: int.parse(_expectedDurationController.text));
                     final task = Task(
                       name: _nameController.text,
                       category: _categoryController.text,
                       comment: _commentController.text,
+                      expectedDuration: expectedDuration,
                       duration: Duration.zero,
                       date: DateTime.now(),
                     );
