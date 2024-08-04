@@ -71,7 +71,7 @@ class HomeScreenState extends State<HomeScreen> {
           final task = tasks[index];
           return ListTile(
             title: Text(task.name),
-            subtitle: Text('${task.category} - ${_formatDuration(task.duration)}'),
+            subtitle: Text('${task.category} - ${_formatDuration(task.expectedDuration)}'),
             trailing: Text(
               _formatDate(task.date),
               style: const TextStyle(color: Colors.grey),
@@ -99,7 +99,7 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Date fromat
+  // Date format
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
   }
